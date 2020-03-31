@@ -62,7 +62,7 @@ jobs:
       - name: "Build Docker image"
         if: env.RELEASE_VERSION != ''
         run: |
-          docker build . -t "$IMAGE_NAME:${{ matrix.base }}-$RELEASE_VERSION" \
+          cd ${{ matrix.base }} && docker build . -t "$IMAGE_NAME:${{ matrix.base }}-$RELEASE_VERSION" \
               --label "org.label-schema.schema-version=1.0" \
               --label "org.label-schema.vcs-ref=${GITHUB_SHA}" \
               --label "org.label-schema.vcs-url=https://github.com/${GITHUB_REPOSITORY}" \
