@@ -8,23 +8,60 @@ env:
   IMAGE_NAME: "homecentr/base"
 
 jobs:
-  build:
+  common:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@master
-
       - name: "Determine release version"
         uses: codfish/semantic-release-action@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: "Write version to a file"
+        shell: bash
+        runs: |
+          echo $RELEASE_VERSION > version.txt
+
+      - name: "Upload version number as artifact"
+        uses: actions/upload-artifact@v1
+        with:
+          name: version
+          path: version.txt
+
+      - name: "Update Docker Hub description"
+        uses: peter-evans/dockerhub-description@v2.1.0
+        env:
+          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+          DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
+          DOCKERHUB_REPOSITORY: ${{ env.IMAGE_NAME }}
+
+  build:
+    runs-on: ubuntu-latest
+    needs:
+      - common
+    strategy:
+      matrix:
+        base: [ "alpine", "centos" ]
+    steps:
+      - name: Download version artifact
+        uses: actions/download-artifact@v1
+        with:
+          name: version
+
+      - name: Read version into a variable
+        run: "echo ::set-env name=RELEASE_VERSION::$(cat version/version.txt)"
+
+      - uses: actions/checkout@master
+
       - name: Verify Dockerfile with Hadolint
+        if: env.RELEASE_VERSION != ''
         uses: brpaz/hadolint-action@master
+        with:
+          dockerfile: "${{ matrix.base }}/Dockerfile"
 
       - name: "Build Docker image"
         if: env.RELEASE_VERSION != ''
         run: |
-          docker build . -t "$IMAGE_NAME:$RELEASE_VERSION" \
+          docker build . -t "$IMAGE_NAME:${{ matrix.base }}-$RELEASE_VERSION" \
               --label "org.label-schema.schema-version=1.0" \
               --label "org.label-schema.vcs-ref=${GITHUB_SHA}" \
               --label "org.label-schema.vcs-url=https://github.com/${GITHUB_REPOSITORY}" \
@@ -37,12 +74,8 @@ jobs:
         if: env.RELEASE_VERSION != ''
         uses: phonito/phonito-scanner-action@master
         with:
-          image: ${{ env.IMAGE_NAME }}:${{ env.RELEASE_VERSION }}
+          image: ${{ env.IMAGE_NAME }}:${{ matrix.base }}-${{ env.RELEASE_VERSION }}
           phonito-token: '${{ secrets.PHONITO_TOKEN }}'
-
-      - name: "Tag image as latest"
-        if: env.RELEASE_VERSION != ''
-        run: "docker tag $IMAGE_NAME:$RELEASE_VERSION $IMAGE_NAME:latest"
 
       - name: "Log into Docker Hub"
         if: env.RELEASE_VERSION != ''
@@ -50,19 +83,7 @@ jobs:
 
       - name: "Push versioned image"
         if: env.RELEASE_VERSION != ''
-        run: "docker push $IMAGE_NAME:$RELEASE_VERSION"
-
-      - name: "Push latest image"
-        if: env.RELEASE_VERSION != ''
-        run: "docker push $IMAGE_NAME:latest"
-
-      - name: "Update Docker Hub description"
-        if: env.RELEASE_VERSION != ''
-        uses: peter-evans/dockerhub-description@v2.1.0
-        env:
-          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-          DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
-          DOCKERHUB_REPOSITORY: ${{ env.IMAGE_NAME }}
+        run: "docker push $IMAGE_NAME:${{ matrix.base }}-$RELEASE_VERSION"
 
       - name: "Notify Microbadger to refresh metadata"
         uses: wei/curl@master
