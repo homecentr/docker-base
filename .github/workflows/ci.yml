@@ -24,7 +24,7 @@ jobs:
       - name: Verify Dockerfile with Hadolint
         uses: brpaz/hadolint-action@master      
         with:
-          dockerfile: "{{ matrix.base }}/Dockerfile"
+          dockerfile: "${{ matrix.base }}/Dockerfile"
 
       - name: Build Docker image
         run: "cd {{ matrix.base }} && docker build . -t ${{ env.IMAGE_NAME }}:${{ matrix.base }}-${{ steps.vars.outputs.docker_tag }}"
