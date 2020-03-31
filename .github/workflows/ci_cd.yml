@@ -1,21 +1,20 @@
 name: CI/CD on master
 on:
   push:
-    # branches:
-    #   - master
+    branches:
+      - master
 
 env:
   IMAGE_NAME: "homecentr/base"
-  RELEASE_VERSION: 55.5.0
 
 jobs:
   common:
     runs-on: ubuntu-latest
     steps:
-      # - name: "Determine release version"
-      #   uses: codfish/semantic-release-action@master
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: "Determine release version"
+        uses: codfish/semantic-release-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: "Write version to a file"
         shell: bash
