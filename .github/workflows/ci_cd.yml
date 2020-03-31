@@ -19,7 +19,7 @@ jobs:
 
       - name: "Write version to a file"
         shell: bash
-        runs: |
+        run: |
           echo $RELEASE_VERSION > version.txt
 
       - name: "Upload version number as artifact"
