@@ -27,7 +27,7 @@ jobs:
           dockerfile: "${{ matrix.base }}/Dockerfile"
 
       - name: Build Docker image
-        run: "cd {{ matrix.base }} && docker build . -t ${{ env.IMAGE_NAME }}:${{ matrix.base }}-${{ steps.vars.outputs.docker_tag }}"
+        run: "cd ${{ matrix.base }} && docker build . -t ${{ env.IMAGE_NAME }}:${{ matrix.base }}-${{ steps.vars.outputs.docker_tag }}"
 
       - name: Scan with Phonito Security
         uses: phonito/phonito-scanner-action@master
