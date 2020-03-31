@@ -12,4 +12,4 @@ FROM scratch
 
 COPY --from=s6 /s6 /
 
-COPY ./etc /etc
+COPY ./fs /

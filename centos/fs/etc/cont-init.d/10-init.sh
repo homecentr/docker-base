@@ -1,4 +1,4 @@
-#!/usr/bin/with-contenv ash
+#!/usr/bin/with-contenv bash
 PUID=${PUID:-7077}
 PGID=${PGID:-7077}
 
@@ -16,13 +16,13 @@ fi
 
 if [ "$PGID" -ne "0" ]
 then
-  addgroup -g $PGID nonroot
+  groupadd -g $PGID nonroot
   DISPLAY_GROUP="nonroot"
 fi
 
 if [ "$PUID" -ne "0" ]
 then
-  adduser -u $PUID -G nonroot -D nonroot
+  useradd -u $PUID -g nonroot nonroot
   DISPLAY_USER="nonroot"
 fi
 

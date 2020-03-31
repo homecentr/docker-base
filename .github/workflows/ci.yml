@@ -5,9 +5,15 @@ on:
       - master
   pull_request:
 
+environment:
+  IMAGE_NAME: homecentr/base  
+
 jobs:
   build:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        base: [ "alpine", "centos" ]
     steps:
       - uses: actions/checkout@master
       
@@ -17,12 +23,14 @@ jobs:
 
       - name: Verify Dockerfile with Hadolint
         uses: brpaz/hadolint-action@master      
+        with:
+          dockerfile: "{{ matrix.base }}/Dockerfile"
 
       - name: Build Docker image
-        run: docker build .
+        run: "cd {{ matrix.base }} && docker build . -t ${{ env.IMAGE_NAME }}:${{ matrix.base }}-${{ steps.vars.outputs.docker_tag }}"
 
       - name: Scan with Phonito Security
         uses: phonito/phonito-scanner-action@master
         with:
-          image: ${{ env.IMAGE_NAME }}:${{ steps.vars.outputs.docker_tag }}
+          image: ${{ env.IMAGE_NAME }}:${{ matrix.base }}-${{ steps.vars.outputs.docker_tag }}
           phonito-token: '${{ secrets.PHONITO_TOKEN }}'      
