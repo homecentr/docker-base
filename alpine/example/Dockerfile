@@ -1,6 +1,6 @@
-FROM base as base
+FROM base-alpine:local as base
 
-FROM alpine
+FROM alpine:3.11.5
 
 COPY --from=base / /
 
