@@ -1,0 +1,11 @@
+version: 1
+update_configs:
+  - package_manager: "docker"
+    directory: "/alpine"
+    update_schedule: "daily"
+  - package_manager: "docker"
+    directory: "/centos"
+    update_schedule: "daily"
+  - package_manager: "github"
+    directory: "/"
+    update_schedule: "daily"
