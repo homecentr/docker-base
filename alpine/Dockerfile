@@ -1,4 +1,4 @@
-FROM alpine:3.11.3 as s6
+FROM alpine:3.11.5 as s6
 
 ENV S6_VERSION="v1.22.1.0"
 ENV CPU_ARCH="amd64"
