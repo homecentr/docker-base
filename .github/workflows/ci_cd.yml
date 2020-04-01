@@ -11,6 +11,8 @@ jobs:
   common:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@master
+      
       - name: "Determine release version"
         uses: codfish/semantic-release-action@master
         env:
