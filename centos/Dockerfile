@@ -21,8 +21,6 @@ RUN mkdir /s6 && \
 
 FROM centos:8.1.1911
 
-RUN yum install -y shadow
-
 COPY --from=s6 /s6 /
 
 COPY ./fs /
