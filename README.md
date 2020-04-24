@@ -1,2 +1,2 @@
 # HomeCentr - base
-Template repository for Docker container repositories
+Base image for other Homecentr images, not inteded for external use.

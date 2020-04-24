@@ -1,7 +1,12 @@
-FROM alpine:3.11.5 as s6
+FROM alpine:3.11.6 as s6
+
+LABEL maintainer="Lukas Holota <me@lholota.com>"
 
 ENV S6_VERSION="v1.22.1.0"
 ENV CPU_ARCH="amd64"
+
+ENV PUID=7077
+ENV PGID=7077
 
 ADD https://github.com/just-containers/s6-overlay/releases/download/${S6_VERSION}/s6-overlay-${CPU_ARCH}.tar.gz /tmp/
 
@@ -14,7 +19,9 @@ RUN mkdir /s6 && \
     # Remove the empty directory so it does not overwrite the symlink
     rmdir /s6/bin
 
-FROM scratch
+FROM centos:8.1.1911
+
+RUN yum install -y shadow
 
 COPY --from=s6 /s6 /
 
