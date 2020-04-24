@@ -63,20 +63,20 @@ jobs:
       - name: "Build Docker image"
         if: env.RELEASE_VERSION != ''
         run: |
-          cd ${{ matrix.base }} && docker build . -t "$IMAGE_NAME:${{ matrix.base }}-$RELEASE_VERSION" \
+          cd ${{ matrix.base }} && docker build . -t "$IMAGE_NAME:$RELEASE_VERSION-${{ matrix.base }}" \
               --label "org.label-schema.schema-version=1.0" \
               --label "org.label-schema.vcs-ref=${GITHUB_SHA}" \
               --label "org.label-schema.vcs-url=https://github.com/${GITHUB_REPOSITORY}" \
               --label "org.label-schema.url=https://github.com/${GITHUB_REPOSITORY}" \
               --label "org.label-schema.vendor=HomeCentr" \
-              --label "version=$RELEASE_VERSION" \
+              --label "version=$RELEASE_VERSION-${{ matrix.base }}" \
               --label "org.label-schema.build-date=$(date '+%F %T')"
       
       - name: Scan with Phonito Security
         if: env.RELEASE_VERSION != ''
         uses: phonito/phonito-scanner-action@master
         with:
-          image: ${{ env.IMAGE_NAME }}:${{ matrix.base }}-${{ env.RELEASE_VERSION }}
+          image: ${{ env.IMAGE_NAME }}:${{ env.RELEASE_VERSION }}-${{ matrix.base }}
           phonito-token: '${{ secrets.PHONITO_TOKEN }}'
 
       - name: "Log into Docker Hub"
@@ -85,7 +85,7 @@ jobs:
 
       - name: "Push versioned image"
         if: env.RELEASE_VERSION != ''
-        run: "docker push $IMAGE_NAME:${{ matrix.base }}-$RELEASE_VERSION"
+        run: "docker push $IMAGE_NAME:$RELEASE_VERSION-${{ matrix.base }}"
 
       - name: "Notify Microbadger to refresh metadata"
         uses: wei/curl@master
