@@ -9,12 +9,15 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        base: [ "alpine", "centos" ]
     steps:
       - name: Pull Docker image
-        run: docker pull ${{ env.IMAGE_NAME }}:latest
+        run: docker pull ${{ env.IMAGE_NAME }}:latest-${{ matrix.base }}
 
       - name: Scan image for vulnerabilities
         uses: phonito/phonito-scanner-action@master
         with:
-          image: ${{ env.IMAGE_NAME }}:latest
+          image: ${{ env.IMAGE_NAME }}:latest-${{ matrix.base }}
           phonito-token: '${{ secrets.PHONITO_TOKEN }}'

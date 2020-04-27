@@ -71,13 +71,17 @@ jobs:
               --label "org.label-schema.vendor=HomeCentr" \
               --label "version=$RELEASE_VERSION-${{ matrix.base }}" \
               --label "org.label-schema.build-date=$(date '+%F %T')"
-      
+
       - name: Scan with Phonito Security
         if: env.RELEASE_VERSION != ''
         uses: phonito/phonito-scanner-action@master
         with:
           image: ${{ env.IMAGE_NAME }}:${{ env.RELEASE_VERSION }}-${{ matrix.base }}
           phonito-token: '${{ secrets.PHONITO_TOKEN }}'
+
+      - name: "Tag image as latest"
+        if: env.RELEASE_VERSION != ''
+        run: "docker tag $IMAGE_NAME:$RELEASE_VERSION-${{ matrix.base }} $IMAGE_NAME:latest-${{ matrix.base }}"
 
       - name: "Log into Docker Hub"
         if: env.RELEASE_VERSION != ''
@@ -86,6 +90,10 @@ jobs:
       - name: "Push versioned image"
         if: env.RELEASE_VERSION != ''
         run: "docker push $IMAGE_NAME:$RELEASE_VERSION-${{ matrix.base }}"
+
+      - name: "Push latest image"
+        if: env.RELEASE_VERSION != ''
+        run: "docker push $IMAGE_NAME:latest-${{ matrix.base }}"
 
       - name: "Notify Microbadger to refresh metadata"
         uses: wei/curl@master
