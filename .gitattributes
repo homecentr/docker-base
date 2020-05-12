@@ -1,2 +1,4 @@
 * text=auto
-*.sh         eol=lf
+*.sh            eol=lf
+**/run          eol=lf
+*/services.d/*  eol=lf

@@ -24,3 +24,5 @@ FROM centos:8.1.1911
 COPY --from=s6 /s6 /
 
 COPY ./fs /
+
+ENTRYPOINT [ "/init" ]

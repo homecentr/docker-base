@@ -14,3 +14,5 @@ RUN tar xzf /tmp/s6-overlay-${CPU_ARCH}.tar.gz -C / && \
     apk add --no-cache shadow=4.7-r1
 
 COPY ./fs /
+
+ENTRYPOINT [ "/init" ]
