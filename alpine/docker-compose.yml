@@ -1,0 +1,10 @@
+version: "3.7"
+services:
+  base_centos:
+    build: .
+    image: homecentr/base:alpine-local
+    environment:
+      FILE__TEST_VAR: "/var-value.txt"
+    volumes:
+      - "./example/run:/etc/services.d/env-test/run"
+      - "./example/var-value.txt:/var-value.txt"
