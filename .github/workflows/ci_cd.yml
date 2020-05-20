@@ -81,7 +81,7 @@ jobs:
           phonito-token: '${{ secrets.PHONITO_TOKEN }}'
 
       - name: Test Docker image
-        run: chmod 777 ${{ matrix.base }}/example && cd tests && gradle test -Dimage_tag=${{ env.IMAGE_NAME }}:${{ env.RELEASE_VERSION }}-${{ matrix.base }} -Dbase=${{ matrix.base }}
+        run: chmod 777 ${{ matrix.base }}/example && cd tests && gradle test -Ddocker_image_tag=${{ env.IMAGE_NAME }}:${{ env.RELEASE_VERSION }}-${{ matrix.base }} -Dbase=${{ matrix.base }}
 
       - name: "Tag image as latest"
         if: env.RELEASE_VERSION != ''

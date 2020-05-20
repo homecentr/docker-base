@@ -28,7 +28,7 @@ public class BaseWithSecretFileVariableShould {
 
     @Test
     public void setEnvVarFromSecretFileWhenEnvVarPassed() throws Exception {
-        _container = new GenericContainerEx<>(new EnvironmentImageTagResolver(Helpers.dockerImageFallback))
+        _container = new GenericContainerEx<>(new EnvironmentImageTagResolver(Helpers.getDockerImageFallback()))
                 .withRelativeFileSystemBind(Paths.get(Helpers.getExamplesDir(), "loop").toString(), "/usr/sbin/loop")
                 .withRelativeFileSystemBind(Paths.get(Helpers.getExamplesDir(), "run").toString(), "/etc/services.d/env-test/run")
                 .withRelativeFileSystemBind(Paths.get(Helpers.getExamplesDir(), "var-value.txt").toString(), "/var-value.txt")
@@ -45,7 +45,7 @@ public class BaseWithSecretFileVariableShould {
 
     @Test
     public void printToOutputThatVariableWasSetWhenEnvVarPassed() throws Exception {
-        _container = new GenericContainerEx<>(new EnvironmentImageTagResolver(Helpers.dockerImageFallback))
+        _container = new GenericContainerEx<>(new EnvironmentImageTagResolver(Helpers.getDockerImageFallback()))
                 .withRelativeFileSystemBind(Paths.get(Helpers.getExamplesDir(), "loop").toString(), "/usr/sbin/loop")
                 .withRelativeFileSystemBind(Paths.get(Helpers.getExamplesDir(), "run").toString(), "/etc/services.d/env-test/run")
                 .withRelativeFileSystemBind(Paths.get(Helpers.getExamplesDir(), "var-value.txt").toString(), "/var-value.txt")
@@ -60,7 +60,7 @@ public class BaseWithSecretFileVariableShould {
 
     @Test
     public void printToOutputWhenPassedFileDoesNotExist() throws Exception {
-        _container = new GenericContainerEx<>(new EnvironmentImageTagResolver(Helpers.dockerImageFallback))
+        _container = new GenericContainerEx<>(new EnvironmentImageTagResolver(Helpers.getDockerImageFallback()))
                 .withRelativeFileSystemBind(Paths.get(Helpers.getExamplesDir(), "loop").toString(), "/usr/sbin/loop")
                 .withRelativeFileSystemBind(Paths.get(Helpers.getExamplesDir(), "run").toString(), "/etc/services.d/env-test/run")
                 .withRelativeFileSystemBind(Paths.get(Helpers.getExamplesDir(), "var-value.txt").toString(), "/var-value.txt")
@@ -76,7 +76,7 @@ public class BaseWithSecretFileVariableShould {
 
     @Test
     public void skipWhenNoVariablesPassed() {
-        _container = new GenericContainerEx<>(new EnvironmentImageTagResolver(Helpers.dockerImageFallback))
+        _container = new GenericContainerEx<>(new EnvironmentImageTagResolver(Helpers.getDockerImageFallback()))
                 .withRelativeFileSystemBind(Paths.get(Helpers.getExamplesDir(), "loop").toString(), "/usr/sbin/loop")
                 .withRelativeFileSystemBind(Paths.get(Helpers.getExamplesDir(), "run").toString(), "/etc/services.d/env-test/run")
                 .withRelativeFileSystemBind(Paths.get(Helpers.getExamplesDir(), "var-value.txt").toString(), "/var-value.txt")

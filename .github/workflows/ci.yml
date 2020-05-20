@@ -30,7 +30,7 @@ jobs:
         run: "cd ${{ matrix.base }} && docker build . -t ${{ env.IMAGE_NAME }}:${{ steps.vars.outputs.docker_tag }}-${{ matrix.base }}"
 
       - name: Test Docker image
-        run: chmod 777 ${{ matrix.base }}/example && cd tests && gradle test -Dimage_tag=${{ env.IMAGE_NAME }}:${{ steps.vars.outputs.docker_tag }}-${{ matrix.base }} -Dbase=${{ matrix.base }}
+        run: chmod 777 ${{ matrix.base }}/example && cd tests && gradle test -Ddocker_image_tag=${{ env.IMAGE_NAME }}:${{ steps.vars.outputs.docker_tag }}-${{ matrix.base }} -Dbase=${{ matrix.base }}
 
       - name: Scan with Phonito Security
         uses: phonito/phonito-scanner-action@master

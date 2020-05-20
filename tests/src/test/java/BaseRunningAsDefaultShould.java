@@ -22,7 +22,7 @@ public class BaseRunningAsDefaultShould {
 
     @BeforeClass
     public static void before() {
-        _container = new GenericContainerEx<>(new EnvironmentImageTagResolver(Helpers.dockerImageFallback))
+        _container = new GenericContainerEx<>(new EnvironmentImageTagResolver(Helpers.getDockerImageFallback()))
                 .withRelativeFileSystemBind(Paths.get(Helpers.getExamplesDir(), "loop").toString(), "/usr/sbin/loop")
                 .withRelativeFileSystemBind(Paths.get(Helpers.getExamplesDir(), "run").toString(), "/etc/services.d/env-test/run")
                 .withImagePullPolicy(PullPolicyEx.never())

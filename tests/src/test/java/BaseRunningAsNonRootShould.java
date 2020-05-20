@@ -22,7 +22,7 @@ public class BaseRunningAsNonRootShould {
 
     @BeforeClass
     public static void before() {
-        _container = new GenericContainerEx<>(new EnvironmentImageTagResolver(Helpers.dockerImageFallback))
+        _container = new GenericContainerEx<>(new EnvironmentImageTagResolver(Helpers.getDockerImageFallback()))
                 .withEnv("PUID", "7000")
                 .withEnv("PGID", "8000")
                 .withRelativeFileSystemBind(Paths.get(Helpers.getExamplesDir(), "loop").toString(), "/usr/sbin/loop")
