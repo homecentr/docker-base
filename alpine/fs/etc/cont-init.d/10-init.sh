@@ -1,7 +1,4 @@
 #!/usr/bin/with-contenv ash
-PUID=${PUID:-7077}
-PGID=${PGID:-7077}
-
 DISPLAY_GROUP="root"
 DISPLAY_USER="root"
 
@@ -16,12 +13,14 @@ fi
 
 if [ "$PGID" -ne "0" ]
 then
+  # TODO: Delete group if it exists
   addgroup -g $PGID nonroot
   DISPLAY_GROUP="nonroot"
 fi
 
 if [ "$PUID" -ne "0" ]
 then
+  # TODO: Delete user if it exists
   adduser -u $PUID -G nonroot -D nonroot
   DISPLAY_USER="nonroot"
 fi

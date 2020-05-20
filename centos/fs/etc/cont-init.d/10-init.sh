@@ -1,6 +1,4 @@
 #!/usr/bin/with-contenv bash
-PUID=${PUID:-7077}
-PGID=${PGID:-7077}
 
 DISPLAY_GROUP="root"
 DISPLAY_USER="root"
