@@ -14,6 +14,23 @@ fi
 
 if [ "$PGID" -ne "0" ]
 then
+  # The user must be deleted first otherwise it could still be a m
+  cat /etc/passwd | grep ^nonroot: > /dev/null
+
+  if [ $? == 0 ]
+  then
+    # User already exists, delete it
+    userdel nonroot
+  fi
+
+  cat /etc/group | grep ^nonroot: > /dev/null
+
+  if [ $? == 0 ]
+  then
+    # Group already exists, delete it
+    groupdel nonroot
+  fi
+
   groupadd -g $PGID nonroot
   DISPLAY_GROUP="nonroot"
 fi

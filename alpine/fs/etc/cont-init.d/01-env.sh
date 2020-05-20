@@ -19,7 +19,4 @@ for FULL_FILENAME in /var/run/s6/container_environment/FILE__*; do
     else
       echo "[env-vars] Variable $VAR_NAME could not be set from ${VAR_VALUE_FILE}. File not found."
     fi
-  # else
-  #   echo "IGNORING $FILENAME"
-  # fi
 done
