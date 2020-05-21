@@ -21,8 +21,6 @@ public class Helpers {
     }
 
     private static String getBase() {
-        return "centos";
-
-        // return System.getProperty("base");
+        return System.getProperty("base");
     }
 }
