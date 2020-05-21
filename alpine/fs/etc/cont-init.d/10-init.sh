@@ -1,9 +1,18 @@
 #!/usr/bin/with-contenv ash
-PUID=${PUID:-7077}
-PGID=${PGID:-7077}
-
 DISPLAY_GROUP="root"
 DISPLAY_USER="root"
+
+if [ "$PUID" == "" ]
+then
+  >&2 echo "The PUID variable cannot be empty."
+  exit 2
+fi
+
+if [ "$PGID" == "" ]
+then
+  >&2 echo "The PGID variable cannot be empty."
+  exit 2
+fi
 
 if [ "$PGID" != "0" ] || [ "$PUID" != "0" ]
 then
@@ -16,6 +25,23 @@ fi
 
 if [ "$PGID" -ne "0" ]
 then
+  # The user must be deleted first otherwise it could still be a m
+  cat /etc/passwd | grep ^nonroot: > /dev/null
+
+  if [ $? == 0 ]
+  then
+    # User already exists, delete it
+    deluser nonroot
+  fi
+
+  cat /etc/group | grep ^nonroot: > /dev/null
+
+  if [ $? == 0 ]
+  then
+    # Group already exists, delete it
+    delgroup nonroot
+  fi
+  
   addgroup -g $PGID nonroot
   DISPLAY_GROUP="nonroot"
 fi

@@ -1,0 +1,9 @@
+#!/usr/bin/with-contenv bash
+
+echo "TEST_VAR=$TEST_VAR"
+
+while :
+do
+  echo "Tick"
+  sleep 1
+done
