@@ -17,4 +17,6 @@ RUN tar xzf /tmp/s6-overlay-${CPU_ARCH}.tar.gz -C / && \
 
 COPY ./fs /
 
+RUN chmod a+x /usr/sbin/runas
+
 ENTRYPOINT [ "/init" ]
