@@ -23,7 +23,8 @@ dependencies {
 }
 
 test {
-    systemProperty 'image_tag', System.getProperty('image_tag')
+    systemProperty 'docker_image_tag', System.getProperty('docker_image_tag')
+    systemProperty 'base', System.getProperty('base')
 
     afterTest { desc, result ->
         logger.quiet "Executing test ${desc.name} [${desc.className}] with result: ${result.resultType}"
