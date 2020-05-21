@@ -2,6 +2,18 @@
 DISPLAY_GROUP="root"
 DISPLAY_USER="root"
 
+if [ "$PUID" == "" ]
+then
+  >&2 echo "The PUID variable cannot be empty."
+  exit 2
+fi
+
+if [ "$PGID" == "" ]
+then
+  >&2 echo "The PGID variable cannot be empty."
+  exit 2
+fi
+
 if [ "$PGID" != "0" ] || [ "$PUID" != "0" ]
 then
   if ( ! type "addgroup" > /dev/null; ) || ( ! type "adduser" > /dev/null; )

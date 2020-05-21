@@ -1,5 +1,7 @@
 #!/usr/bin/with-contenv bash
 
+echo "PUID=$PUID, PGID=$PGID"
+
 MATCHING_FILES=$(find /var/run/s6/container_environment/ -name "FILE__*" | wc -l)
 
 if [ $MATCHING_FILES -le 0 ]; then

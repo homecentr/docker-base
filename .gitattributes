@@ -3,3 +3,4 @@
 **/run          eol=lf
 */services.d/*  eol=lf
 **/run          eol=lf
+**/runas        eol=lf

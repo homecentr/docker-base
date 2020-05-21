@@ -1,7 +1,21 @@
 #!/usr/bin/with-contenv bash
 
+echo "PUID=$PUID, PGID=$PGID"
+
 DISPLAY_GROUP="root"
 DISPLAY_USER="root"
+
+if [ "$PUID" == "" ]
+then
+  >&2 echo "The PUID variable cannot be empty."
+  exit 2
+fi
+
+if [ "$PGID" == "" ]
+then
+  >&2 echo "The PGID variable cannot be empty."
+  exit 2
+fi
 
 if [ "$PGID" != "0" ] || [ "$PUID" != "0" ]
 then
@@ -12,7 +26,7 @@ then
   fi
 fi
 
-if [ "$PGID" -ne "0" ]
+if [ "$PGID" != "0" ]
 then
   # The user must be deleted first otherwise it could still be a m
   cat /etc/passwd | grep ^nonroot: > /dev/null
@@ -35,9 +49,9 @@ then
   DISPLAY_GROUP="nonroot"
 fi
 
-if [ "$PUID" -ne "0" ]
+if [ "$PUID" != "0" ]
 then
-  useradd -u $PUID -g nonroot nonroot
+  useradd -u $PUID -g $PGID nonroot
   DISPLAY_USER="nonroot"
 fi
 

@@ -2,21 +2,27 @@ import java.nio.file.Paths;
 
 public class Helpers {
     public static String getDockerImageFallback() {
-        return "homecentr/base:local-centos";
+        return "homecentr/base:local-" + getBase();
     }
 
     public static String getExamplesDir() {
         return Paths.get(
                 "..",
-                System.getProperty("base"),
+                getBase(),
                 "example").toString();
     }
 
     public static String getShell() {
-        if(System.getProperty("base") == "centos") {
-            return "ash";
+        if(getBase() == "centos") {
+            return "bash";
         }
 
-        return "base";
+        return "ash";
+    }
+
+    private static String getBase() {
+        return "centos";
+
+        // return System.getProperty("base");
     }
 }

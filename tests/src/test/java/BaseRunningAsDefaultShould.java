@@ -38,29 +38,29 @@ public class BaseRunningAsDefaultShould {
     }
 
     @Test
-    public void writeZeroPgidIntoOutput() throws Exception {
+    public void writePgidIntoOutput() throws Exception {
         waitFor(
                 Duration.ofSeconds(10),
                 () -> _container.getLogsAnalyzer().matches(".*User gid:\\s+7077.*"));
     }
 
     @Test
-    public void writeZeroPuidIntoOutput() throws Exception {
+    public void writePuidIntoOutput() throws Exception {
         waitFor(
                 Duration.ofSeconds(10),
                 () -> _container.getLogsAnalyzer().matches(".*User uid:\\s+7077.*"));
     }
 
     @Test
-    public void runServiceAsRootUid() throws Exception {
-        int uid = _container.getProcessUid("ash /usr/sbin/loop");
+    public void runServiceAsDefaultUid() throws Exception {
+        int uid = _container.getProcessUid(Helpers.getShell() + " /usr/sbin/loop");
 
         assertEquals(7077, uid);
     }
 
     @Test
-    public void runServiceAsRootGid() throws Exception {
-        int gid = _container.getProcessGid("ash /usr/sbin/loop");
+    public void runServiceAsDefaultGid() throws Exception {
+        int gid = _container.getProcessGid(Helpers.getShell() + " /usr/sbin/loop");
 
         assertEquals(7077, gid);
     }
