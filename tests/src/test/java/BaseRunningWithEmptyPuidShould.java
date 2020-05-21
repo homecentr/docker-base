@@ -7,6 +7,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.testcontainers.containers.ContainerLaunchException;
 import org.testcontainers.containers.output.OutputFrame;
 import org.testcontainers.containers.output.Slf4jLogConsumer;
 
@@ -24,13 +25,20 @@ public class BaseRunningWithEmptyPuidShould {
     @BeforeClass
     public static void before() {
         _container = new GenericContainerEx<>(new EnvironmentImageTagResolver(Helpers.getDockerImageFallback()))
+                .withStartupAttempts(1)
                 .withEnv("PUID", "")
                 .withRelativeFileSystemBind(Paths.get(Helpers.getExamplesDir(), "loop").toString(), "/usr/sbin/loop")
                 .withRelativeFileSystemBind(Paths.get(Helpers.getExamplesDir(), "run").toString(), "/etc/services.d/env-test/run")
                 .withImagePullPolicy(PullPolicyEx.never())
                 .waitingFor(WaitEx.forS6OverlayStart());
 
-        _container.start();
+        try {
+            _container.start();
+        }
+        catch (ContainerLaunchException ex) {
+            // The container is expected to fail to start
+        }
+
         _container.followOutput(new Slf4jLogConsumer(logger));
     }
 
@@ -41,6 +49,6 @@ public class BaseRunningWithEmptyPuidShould {
 
     @Test
     public void exit() throws Exception {
-        waitFor(Duration.ofSeconds(5), () -> _container.isRunning());
+        waitFor(Duration.ofSeconds(5), () -> !_container.isRunning());
     }
 }
