@@ -55,14 +55,14 @@ public class BaseRunningAsNonRootShould {
 
     @Test
     public void runServiceAsPassedUid() throws Exception {
-        int uid = _container.getProcessUid("ash /usr/sbin/loop");
+        int uid = _container.getProcessUid(Helpers.getShell() + " /usr/sbin/loop");
 
         assertEquals(7000, uid);
     }
 
     @Test
     public void runServiceAsPassedGid() throws Exception {
-        int gid = _container.getProcessGid("ash /usr/sbin/loop");
+        int gid = _container.getProcessGid(Helpers.getShell() + " /usr/sbin/loop");
 
         assertEquals(8000, gid);
     }
