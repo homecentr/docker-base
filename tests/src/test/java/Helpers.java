@@ -21,7 +21,6 @@ public class Helpers {
     }
 
     private static String getBase() {
-        return "alpine";
-        //return System.getProperty("base");
+        return System.getProperty("base");
     }
 }
