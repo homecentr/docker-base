@@ -50,6 +50,7 @@ if [ "$PUID" -ne "0" ]
 then
   adduser -u $PUID -G nonroot -D nonroot
   DISPLAY_USER="nonroot"
+  echo "/home/nonroot" > /var/run/s6/container_environment/HOME
 fi
 
 echo '

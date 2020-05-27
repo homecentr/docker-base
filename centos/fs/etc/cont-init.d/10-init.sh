@@ -53,6 +53,8 @@ if [ "$PUID" != "0" ]
 then
   useradd -u $PUID -g $PGID nonroot
   DISPLAY_USER="nonroot"
+  
+  echo "/home/nonroot" > /var/run/s6/container_environment/HOME
 fi
 
 echo '

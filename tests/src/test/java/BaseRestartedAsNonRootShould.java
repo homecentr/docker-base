@@ -1,8 +1,11 @@
+import helpers.BaseDockerImageTagResolver;
+import helpers.Image;
 import io.homecentr.testcontainers.containers.GenericContainerEx;
 import io.homecentr.testcontainers.containers.wait.strategy.WaitEx;
-import io.homecentr.testcontainers.images.EnvironmentImageTagResolver;
 import io.homecentr.testcontainers.images.PullPolicyEx;
-import org.junit.*;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testcontainers.containers.output.Slf4jLogConsumer;
@@ -11,7 +14,7 @@ import java.nio.file.Paths;
 import java.time.Duration;
 
 import static io.homecentr.testcontainers.WaitLoop.waitFor;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
 
 public class BaseRestartedAsNonRootShould {
     private static final Logger logger = LoggerFactory.getLogger(BaseRunningAsRootShould.class);
@@ -20,11 +23,11 @@ public class BaseRestartedAsNonRootShould {
 
     @BeforeClass
     public static void before() {
-        _container = new GenericContainerEx<>(new EnvironmentImageTagResolver(Helpers.getDockerImageFallback()))
+        _container = new GenericContainerEx<>(new BaseDockerImageTagResolver())
                 .withEnv("PUID", "7000")
                 .withEnv("PGID", "8000")
-                .withRelativeFileSystemBind(Paths.get(Helpers.getExamplesDir(), "loop").toString(), "/usr/sbin/loop")
-                .withRelativeFileSystemBind(Paths.get(Helpers.getExamplesDir(), "run").toString(), "/etc/services.d/env-test/run")
+                .withRelativeFileSystemBind(Paths.get(Image.getExamplesDir(), "loop").toString(), "/usr/sbin/loop")
+                .withRelativeFileSystemBind(Paths.get(Image.getExamplesDir(), "run").toString(), "/etc/services.d/env-test/run")
                 .withImagePullPolicy(PullPolicyEx.never())
                 .waitingFor(WaitEx.forS6OverlayStart());
 
