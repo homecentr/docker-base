@@ -1,6 +1,7 @@
+import helpers.BaseDockerImageTagResolver;
+import helpers.Image;
 import io.homecentr.testcontainers.containers.GenericContainerEx;
 import io.homecentr.testcontainers.containers.wait.strategy.WaitEx;
-import io.homecentr.testcontainers.images.EnvironmentImageTagResolver;
 import io.homecentr.testcontainers.images.PullPolicyEx;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -22,9 +23,9 @@ public class BaseRunningAsDefaultShould {
 
     @BeforeClass
     public static void before() {
-        _container = new GenericContainerEx<>(new EnvironmentImageTagResolver(Helpers.getDockerImageFallback()))
-                .withRelativeFileSystemBind(Paths.get(Helpers.getExamplesDir(), "loop").toString(), "/usr/sbin/loop")
-                .withRelativeFileSystemBind(Paths.get(Helpers.getExamplesDir(), "run").toString(), "/etc/services.d/env-test/run")
+        _container = new GenericContainerEx<>(new BaseDockerImageTagResolver())
+                .withRelativeFileSystemBind(Paths.get(Image.getExamplesDir(), "loop").toString(), "/usr/sbin/loop")
+                .withRelativeFileSystemBind(Paths.get(Image.getExamplesDir(), "run").toString(), "/etc/services.d/env-test/run")
                 .withImagePullPolicy(PullPolicyEx.never())
                 .waitingFor(WaitEx.forS6OverlayStart());
 
@@ -53,15 +54,25 @@ public class BaseRunningAsDefaultShould {
 
     @Test
     public void runServiceAsDefaultUid() throws Exception {
-        int uid = _container.getProcessUid(Helpers.getShell() + " /usr/sbin/loop");
+        int uid = _container.getProcessUid(Image.getShell() + " /usr/sbin/loop");
 
         assertEquals(7077, uid);
     }
 
     @Test
     public void runServiceAsDefaultGid() throws Exception {
-        int gid = _container.getProcessGid(Helpers.getShell() + " /usr/sbin/loop");
+        int gid = _container.getProcessGid(Image.getShell() + " /usr/sbin/loop");
 
         assertEquals(7077, gid);
+    }
+
+    @Test
+    public void updateHomeEnvironmentVariable() throws Exception {
+        waitFor(Duration.ofSeconds(10), () -> _container.getLogsAnalyzer().contains("HOME=/home/nonroot"));
+    }
+
+    @Test
+    public void createHomeDirectory() throws Exception {
+        waitFor(Duration.ofSeconds(10), () -> _container.execInContainer("ls", "/home/nonroot").getExitCode() == 0);
     }
 }

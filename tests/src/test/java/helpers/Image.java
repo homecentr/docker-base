@@ -1,9 +1,8 @@
+package helpers;
+
 import java.nio.file.Paths;
 
-public class Helpers {
-    public static String getDockerImageFallback() {
-        return "homecentr/base:local-" + getBase();
-    }
+public class Image {
 
     public static String getExamplesDir() {
         return Paths.get(

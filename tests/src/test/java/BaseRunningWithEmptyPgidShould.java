@@ -1,6 +1,7 @@
+import helpers.BaseDockerImageTagResolver;
+import helpers.Image;
 import io.homecentr.testcontainers.containers.GenericContainerEx;
 import io.homecentr.testcontainers.containers.wait.strategy.WaitEx;
-import io.homecentr.testcontainers.images.EnvironmentImageTagResolver;
 import io.homecentr.testcontainers.images.PullPolicyEx;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -22,11 +23,11 @@ public class BaseRunningWithEmptyPgidShould {
 
     @BeforeClass
     public static void before() {
-        _container = new GenericContainerEx<>(new EnvironmentImageTagResolver(Helpers.getDockerImageFallback()))
+        _container = new GenericContainerEx<>(new BaseDockerImageTagResolver())
                 .withStartupAttempts(1)
                 .withEnv("PGID", "")
-                .withRelativeFileSystemBind(Paths.get(Helpers.getExamplesDir(), "loop").toString(), "/usr/sbin/loop")
-                .withRelativeFileSystemBind(Paths.get(Helpers.getExamplesDir(), "run").toString(), "/etc/services.d/env-test/run")
+                .withRelativeFileSystemBind(Paths.get(Image.getExamplesDir(), "loop").toString(), "/usr/sbin/loop")
+                .withRelativeFileSystemBind(Paths.get(Image.getExamplesDir(), "run").toString(), "/etc/services.d/env-test/run")
                 .withImagePullPolicy(PullPolicyEx.never())
                 .waitingFor(WaitEx.forS6OverlayStart());
 

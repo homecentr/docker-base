@@ -1,6 +1,7 @@
+import helpers.BaseDockerImageTagResolver;
+import helpers.Image;
 import io.homecentr.testcontainers.containers.GenericContainerEx;
 import io.homecentr.testcontainers.containers.wait.strategy.WaitEx;
-import io.homecentr.testcontainers.images.EnvironmentImageTagResolver;
 import io.homecentr.testcontainers.images.PullPolicyEx;
 import org.junit.After;
 import org.junit.Test;
@@ -28,10 +29,10 @@ public class BaseWithSecretFileVariableShould {
 
     @Test
     public void setEnvVarFromSecretFileWhenEnvVarPassed() throws Exception {
-        _container = new GenericContainerEx<>(new EnvironmentImageTagResolver(Helpers.getDockerImageFallback()))
-                .withRelativeFileSystemBind(Paths.get(Helpers.getExamplesDir(), "loop").toString(), "/usr/sbin/loop")
-                .withRelativeFileSystemBind(Paths.get(Helpers.getExamplesDir(), "run").toString(), "/etc/services.d/env-test/run")
-                .withRelativeFileSystemBind(Paths.get(Helpers.getExamplesDir(), "var-value.txt").toString(), "/var-value.txt")
+        _container = new GenericContainerEx<>(new BaseDockerImageTagResolver())
+                .withRelativeFileSystemBind(Paths.get(Image.getExamplesDir(), "loop").toString(), "/usr/sbin/loop")
+                .withRelativeFileSystemBind(Paths.get(Image.getExamplesDir(), "run").toString(), "/etc/services.d/env-test/run")
+                .withRelativeFileSystemBind(Paths.get(Image.getExamplesDir(), "var-value.txt").toString(), "/var-value.txt")
                 .withEnv("FILE__TEST_VAR", "/var-value.txt")
                 .withImagePullPolicy(PullPolicyEx.never())
                 .waitingFor(WaitEx.forS6OverlayStart());
@@ -45,10 +46,10 @@ public class BaseWithSecretFileVariableShould {
 
     @Test
     public void printToOutputThatVariableWasSetWhenEnvVarPassed() throws Exception {
-        _container = new GenericContainerEx<>(new EnvironmentImageTagResolver(Helpers.getDockerImageFallback()))
-                .withRelativeFileSystemBind(Paths.get(Helpers.getExamplesDir(), "loop").toString(), "/usr/sbin/loop")
-                .withRelativeFileSystemBind(Paths.get(Helpers.getExamplesDir(), "run").toString(), "/etc/services.d/env-test/run")
-                .withRelativeFileSystemBind(Paths.get(Helpers.getExamplesDir(), "var-value.txt").toString(), "/var-value.txt")
+        _container = new GenericContainerEx<>(new BaseDockerImageTagResolver())
+                .withRelativeFileSystemBind(Paths.get(Image.getExamplesDir(), "loop").toString(), "/usr/sbin/loop")
+                .withRelativeFileSystemBind(Paths.get(Image.getExamplesDir(), "run").toString(), "/etc/services.d/env-test/run")
+                .withRelativeFileSystemBind(Paths.get(Image.getExamplesDir(), "var-value.txt").toString(), "/var-value.txt")
                 .withEnv("FILE__TEST_VAR", "/var-value.txt")
                 .withImagePullPolicy(PullPolicyEx.never())
                 .waitingFor(WaitEx.forS6OverlayStart());
@@ -60,10 +61,10 @@ public class BaseWithSecretFileVariableShould {
 
     @Test
     public void printToOutputWhenPassedFileDoesNotExist() throws Exception {
-        _container = new GenericContainerEx<>(new EnvironmentImageTagResolver(Helpers.getDockerImageFallback()))
-                .withRelativeFileSystemBind(Paths.get(Helpers.getExamplesDir(), "loop").toString(), "/usr/sbin/loop")
-                .withRelativeFileSystemBind(Paths.get(Helpers.getExamplesDir(), "run").toString(), "/etc/services.d/env-test/run")
-                .withRelativeFileSystemBind(Paths.get(Helpers.getExamplesDir(), "var-value.txt").toString(), "/var-value.txt")
+        _container = new GenericContainerEx<>(new BaseDockerImageTagResolver())
+                .withRelativeFileSystemBind(Paths.get(Image.getExamplesDir(), "loop").toString(), "/usr/sbin/loop")
+                .withRelativeFileSystemBind(Paths.get(Image.getExamplesDir(), "run").toString(), "/etc/services.d/env-test/run")
+                .withRelativeFileSystemBind(Paths.get(Image.getExamplesDir(), "var-value.txt").toString(), "/var-value.txt")
                 .withEnv("FILE__TEST_VAR", "/not-existing.txt")
                 .withImagePullPolicy(PullPolicyEx.never())
                 .waitingFor(WaitEx.forS6OverlayStart());
@@ -76,10 +77,10 @@ public class BaseWithSecretFileVariableShould {
 
     @Test
     public void skipWhenNoVariablesPassed() {
-        _container = new GenericContainerEx<>(new EnvironmentImageTagResolver(Helpers.getDockerImageFallback()))
-                .withRelativeFileSystemBind(Paths.get(Helpers.getExamplesDir(), "loop").toString(), "/usr/sbin/loop")
-                .withRelativeFileSystemBind(Paths.get(Helpers.getExamplesDir(), "run").toString(), "/etc/services.d/env-test/run")
-                .withRelativeFileSystemBind(Paths.get(Helpers.getExamplesDir(), "var-value.txt").toString(), "/var-value.txt")
+        _container = new GenericContainerEx<>(new BaseDockerImageTagResolver())
+                .withRelativeFileSystemBind(Paths.get(Image.getExamplesDir(), "loop").toString(), "/usr/sbin/loop")
+                .withRelativeFileSystemBind(Paths.get(Image.getExamplesDir(), "run").toString(), "/etc/services.d/env-test/run")
+                .withRelativeFileSystemBind(Paths.get(Image.getExamplesDir(), "var-value.txt").toString(), "/var-value.txt")
                 .withImagePullPolicy(PullPolicyEx.never())
                 .waitingFor(WaitEx.forS6OverlayStart());
 

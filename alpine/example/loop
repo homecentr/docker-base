@@ -1,6 +1,7 @@
 #!/usr/bin/with-contenv ash
 
 echo "TEST_VAR=$TEST_VAR"
+echo "HOME=$HOME"
 
 while :
 do
