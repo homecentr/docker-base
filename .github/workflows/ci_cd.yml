@@ -81,6 +81,7 @@ jobs:
           phonito-token: '${{ secrets.PHONITO_TOKEN }}'
 
       - name: Test Docker image
+        if: env.RELEASE_VERSION != ''
         run: |
           chmod 777 ${{ matrix.base }}/example
           chmod a+x ${{ matrix.base }}/example/*
