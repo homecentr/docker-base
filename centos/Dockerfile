@@ -14,7 +14,7 @@ RUN mkdir /s6 && \
     # Remove the empty directory so it does not overwrite the symlink
     rmdir /s6/bin
 
-FROM centos:8.1.1911
+FROM centos:8.2.2004
 
 LABEL maintainer="Lukas Holota <me@lholota.com>"
 
