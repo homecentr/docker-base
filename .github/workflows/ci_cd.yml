@@ -102,8 +102,3 @@ jobs:
       - name: "Push latest image"
         if: env.RELEASE_VERSION != ''
         run: "docker push $IMAGE_NAME:latest-${{ matrix.base }}"
-
-      - name: "Notify Microbadger to refresh metadata"
-        uses: wei/curl@master
-        with:
-          args: -X POST ${{ secrets.MICROBADGER_NOTIFY_URL }}
