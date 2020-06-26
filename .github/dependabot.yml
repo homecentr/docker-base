@@ -1,0 +1,32 @@
+version: 2
+updates:
+- package-ecosystem: docker
+  directory: "/centos"
+  schedule:
+    interval: daily
+  open-pull-requests-limit: 10
+  labels:
+  - dependencies
+  commit-message:
+    prefix: fix
+    include: scope
+- package-ecosystem: github-actions
+  directory: "/"
+  schedule:
+    interval: daily
+  open-pull-requests-limit: 10
+  labels:
+  - dependencies
+  commit-message:
+    prefix: ci
+    include: scope
+- package-ecosystem: docker
+  directory: "/alpine"
+  schedule:
+    interval: daily
+  open-pull-requests-limit: 10
+  labels:
+  - dependencies
+  commit-message:
+    prefix: fix
+    include: scope
