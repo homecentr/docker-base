@@ -46,7 +46,7 @@ jobs:
         base: [ "alpine", "centos" ]
     steps:
       - name: Download version artifact
-        uses: actions/download-artifact@v1
+        uses: actions/download-artifact@v2
         with:
           name: version
 
