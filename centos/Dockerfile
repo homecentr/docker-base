@@ -27,7 +27,8 @@ COPY --from=s6 /s6 /
 COPY ./fs /
 
 RUN chmod a+x /usr/sbin/runas && \
+    yum upgrade -y
     # Remove packages with known vulnerabilities
-    yum remove -y binutils curl dbus systemd tar libxml2 libtasn1 libarchive json-c glibc gnutls
+    # yum remove -y binutils curl dbus systemd tar libxml2 libtasn1 libarchive json-c glibc gnutls
 
 ENTRYPOINT [ "/init" ]
