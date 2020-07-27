@@ -80,6 +80,13 @@ jobs:
           image: ${{ env.IMAGE_NAME }}:${{ env.RELEASE_VERSION }}-${{ matrix.base }}
           phonito-token: '${{ secrets.PHONITO_TOKEN }}'
 
+      - name: Scan with Snyk
+        uses: snyk/actions/docker@0.1.1
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          image: ${{ env.IMAGE_NAME }}:${{ env.RELEASE_VERSION }}-${{ matrix.base }}
+
       - name: Test Docker image
         if: env.RELEASE_VERSION != ''
         run: |
