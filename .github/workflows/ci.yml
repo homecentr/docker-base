@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        base: [ "alpine", "centos" ]
+        base: [ "alpine" ]
     steps:
       - uses: actions/checkout@master
       
@@ -41,3 +41,10 @@ jobs:
         with:
           image: ${{ env.IMAGE_NAME }}:${{ steps.vars.outputs.docker_tag }}-${{ matrix.base }}
           phonito-token: '${{ secrets.PHONITO_TOKEN }}'      
+
+      - name: Scan with Snyk
+        uses: snyk/actions/docker@0.1.1
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          image: ${{ env.IMAGE_NAME }}:${{ steps.vars.outputs.docker_tag }}-${{ matrix.base }}

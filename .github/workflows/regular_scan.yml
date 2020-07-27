@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        base: [ "alpine", "centos" ]
+        base: [ "alpine" ]
     steps:
       - name: Pull Docker image
         run: docker pull ${{ env.IMAGE_NAME }}:latest-${{ matrix.base }}
@@ -21,3 +21,10 @@ jobs:
         with:
           image: ${{ env.IMAGE_NAME }}:latest-${{ matrix.base }}
           phonito-token: '${{ secrets.PHONITO_TOKEN }}'
+
+      - name: Scan with Snyk
+        uses: snyk/actions/docker@0.1.1
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          image: ${{ env.IMAGE_NAME }}:latest-${{ matrix.base }}
