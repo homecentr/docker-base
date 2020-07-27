@@ -26,6 +26,7 @@ COPY --from=s6 /s6 /
 
 COPY ./fs /
 
-RUN chmod a+x /usr/sbin/runas
+RUN chmod a+x /usr/sbin/runas && \
+    yum remove binutils
 
 ENTRYPOINT [ "/init" ]
