@@ -43,7 +43,7 @@ jobs:
       - common
     strategy:
       matrix:
-        base: [ "alpine", "centos" ]
+        base: [ "alpine" ]
     steps:
       - name: Download version artifact
         uses: actions/download-artifact@v2
