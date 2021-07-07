@@ -1,8 +1,8 @@
 plugins {
+    id 'maven-publish'
     id 'java'
 }
 
-group 'org.homecentr'
 version '1.0-SNAPSHOT'
 
 sourceCompatibility = 1.8
@@ -10,14 +10,19 @@ sourceCompatibility = 1.8
 repositories {
     mavenCentral()
     maven {
-        url  "https://dl.bintray.com/homecentr/maven"
+        name = "GitHubPackages"
+        url = uri("https://maven.pkg.github.com/homecentr/testcontainers-extensions")
+        credentials {
+            username = project.findProperty("gpr.user") ?: System.getenv("GITHUB_USERNAME")
+            password = project.findProperty("gpr.key") ?: System.getenv("GITHUB_TOKEN")
+        }
     }
 }
 
 dependencies {
     testImplementation group: 'junit', name: 'junit', version: '4.13'
-    testImplementation "org.testcontainers:testcontainers:1.14.1"
-    testImplementation 'io.homecentr:testcontainers-extensions:1.3.1'
+    testImplementation group: 'org.testcontainers', name: 'testcontainers', version: '1.15.3'
+    testImplementation group: 'io.homecentr', name: 'testcontainers-extensions', version: '1.5.0'
     testImplementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.30'
     testImplementation group: 'org.slf4j', name: 'slf4j-simple', version: '1.7.30'
 }
