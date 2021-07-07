@@ -55,7 +55,7 @@ jobs:
           name: version
 
       - name: Read version from file into a variable
-        run: "echo ::set-env name=RELEASE_VERSION::$(cat version/version.txt)"
+        run: "echo ::set-env name=RELEASE_VERSION::$(cat version.txt)"
         env:
           ACTIONS_ALLOW_UNSECURE_COMMANDS: true
 
