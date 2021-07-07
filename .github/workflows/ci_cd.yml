@@ -10,6 +10,8 @@ env:
 jobs:
   common:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@master
       
@@ -39,6 +41,9 @@ jobs:
 
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
     needs:
       - common
     strategy:
@@ -50,7 +55,7 @@ jobs:
         with:
           name: version
 
-      - name: Read version into a variable
+      - name: Read version from file into a variable
         run: "echo ::set-env name=RELEASE_VERSION::$(cat version/version.txt)"
 
       - uses: actions/checkout@master
@@ -64,7 +69,9 @@ jobs:
       - name: "Build Docker image"
         if: env.RELEASE_VERSION != ''
         run: |
-          cd ${{ matrix.base }} && docker build . -t "$IMAGE_NAME:$RELEASE_VERSION-${{ matrix.base }}" \
+          cd ${{ matrix.base }} && docker build . \
+              --tag "$IMAGE_NAME:$RELEASE_VERSION-${{ matrix.base }}" \
+              --tag "$IMAGE_NAME:latest-${{ matrix.base }}" \
               --label "org.label-schema.schema-version=1.0" \
               --label "org.label-schema.vcs-ref=${GITHUB_SHA}" \
               --label "org.label-schema.vcs-url=https://github.com/${GITHUB_REPOSITORY}" \
@@ -72,21 +79,6 @@ jobs:
               --label "org.label-schema.vendor=HomeCentr" \
               --label "version=$RELEASE_VERSION-${{ matrix.base }}" \
               --label "org.label-schema.build-date=$(date '+%F %T')"
-
-      - name: Scan with Phonito Security
-        if: env.RELEASE_VERSION != ''
-        uses: phonito/phonito-scanner-action@master
-        with:
-          image: ${{ env.IMAGE_NAME }}:${{ env.RELEASE_VERSION }}-${{ matrix.base }}
-          phonito-token: '${{ secrets.PHONITO_TOKEN }}'
-
-      - name: Scan with Snyk
-        if: env.RELEASE_VERSION != ''
-        uses: snyk/actions/docker@0.1.1
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-        with:
-          image: ${{ env.IMAGE_NAME }}:${{ env.RELEASE_VERSION }}-${{ matrix.base }}
 
       - name: Test Docker image
         if: env.RELEASE_VERSION != ''
@@ -96,18 +88,16 @@ jobs:
           cd tests
           gradle test -Ddocker_image_tag=${{ env.IMAGE_NAME }}:${{ env.RELEASE_VERSION }}-${{ matrix.base }} -Dbase=${{ matrix.base }}
 
-      - name: "Tag image as latest"
-        if: env.RELEASE_VERSION != ''
-        run: "docker tag $IMAGE_NAME:$RELEASE_VERSION-${{ matrix.base }} $IMAGE_NAME:latest-${{ matrix.base }}"
-
+      # Docker Hub
       - name: "Log into Docker Hub"
         if: env.RELEASE_VERSION != ''
         run: "echo ${{ secrets.DOCKERHUB_PASSWORD }} | docker login --username ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin"
 
-      - name: "Push versioned image"
+      - name: "Push images to Docker Hub"
         if: env.RELEASE_VERSION != ''
-        run: "docker push $IMAGE_NAME:$RELEASE_VERSION-${{ matrix.base }}"
+        run: "docker push $IMAGE_NAME:$RELEASE_VERSION-${{ matrix.base }} && docker push $IMAGE_NAME:latest-${{ matrix.base }}"
 
-      - name: "Push latest image"
+      # GitHub
+      - name: "Push to GitHub Packages"
         if: env.RELEASE_VERSION != ''
-        run: "docker push $IMAGE_NAME:latest-${{ matrix.base }}"
+        run: "docker push ghcr.io/homecentr/$IMAGE_NAME:$RELEASE_VERSION-${{ matrix.base }} && docker push ghcr.io/homecentr/$IMAGE_NAME:latest-${{ matrix.base }}"
