@@ -104,6 +104,9 @@ jobs:
         run: "docker push $IMAGE_NAME:$RELEASE_VERSION-${{ matrix.base }} && docker push $IMAGE_NAME:latest-${{ matrix.base }}"
 
       # GitHub
+      - name: "Log into GitHub Packages"
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
       - name: "Push to GitHub Packages"
         if: env.RELEASE_VERSION != ''
         run: "docker push ghcr.io/$IMAGE_NAME:$RELEASE_VERSION-${{ matrix.base }} && docker push ghcr.io/$IMAGE_NAME:latest-${{ matrix.base }}"
