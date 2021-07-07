@@ -11,6 +11,9 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: read
     strategy:
       matrix:
         base: [ "alpine" ]
@@ -35,3 +38,6 @@ jobs:
           chmod a+x ${{ matrix.base }}/example/*
           cd tests
           gradle test --info -Ddocker_image_tag=${{ env.IMAGE_NAME }}:${{ steps.vars.outputs.docker_tag }}-${{ matrix.base }} -Dbase=${{ matrix.base }}
+        env: # To allow downloading packages
+          GITHUB_USERNAME: ${{ github.actor }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -87,6 +87,9 @@ jobs:
           chmod a+x ${{ matrix.base }}/example/*
           cd tests
           gradle test -Ddocker_image_tag=${{ env.IMAGE_NAME }}:${{ env.RELEASE_VERSION }}-${{ matrix.base }} -Dbase=${{ matrix.base }}
+        env: # To allow downloading packages
+          GITHUB_USERNAME: ${{ github.actor }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       # Docker Hub
       - name: "Log into Docker Hub"
