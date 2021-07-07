@@ -72,6 +72,8 @@ jobs:
           cd ${{ matrix.base }} && docker build . \
               --tag "$IMAGE_NAME:$RELEASE_VERSION-${{ matrix.base }}" \
               --tag "$IMAGE_NAME:latest-${{ matrix.base }}" \
+              --tag "ghcr.io/homecentr/$IMAGE_NAME:$RELEASE_VERSION-${{ matrix.base }}" \
+              --tag "ghcr.io/homecentr/$IMAGE_NAME:latest-${{ matrix.base }}" \
               --label "org.label-schema.schema-version=1.0" \
               --label "org.label-schema.vcs-ref=${GITHUB_SHA}" \
               --label "org.label-schema.vcs-url=https://github.com/${GITHUB_REPOSITORY}" \
