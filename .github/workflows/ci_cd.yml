@@ -57,6 +57,8 @@ jobs:
 
       - name: Read version from file into a variable
         run: "echo ::set-env name=RELEASE_VERSION::$(cat version/version.txt)"
+        env:
+          ACTIONS_ALLOW_UNSECURE_COMMANDS: true
 
       - uses: actions/checkout@master
 
