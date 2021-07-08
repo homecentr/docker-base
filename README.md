@@ -3,7 +3,6 @@
 [![](https://badgen.net/docker/size/homecentr/base/latest-alpine?label=docker%20image%20size%20-%20alpine)](https://hub.docker.com/repository/docker/homecentr/base) 
 
 ![CI/CD on master](https://github.com/homecentr/docker-base/workflows/CI/CD%20on%20master/badge.svg)
-![Regular Docker image vulnerability scan](https://github.com/homecentr/docker-base/workflows/Regular%20Docker%20image%20vulnerability%20scan/badge.svg)
 
 
 # HomeCentr - base
