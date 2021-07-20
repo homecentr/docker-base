@@ -26,6 +26,7 @@ public class BaseRunningAsRootShould {
         _container = new GenericContainerEx<>(new BaseDockerImageTagResolver())
             .withEnv("PUID", "0")
             .withEnv("PGID", "0")
+            .withEnv("PUID_ADDITIONAL_GROUPS", "8005:grp1,8006:grp2")
             .withRelativeFileSystemBind(Paths.get(Image.getExamplesDir(), "loop").toString(), "/usr/sbin/loop")
             .withRelativeFileSystemBind(Paths.get(Image.getExamplesDir(), "run").toString(), "/etc/services.d/env-test/run")
             .withImagePullPolicy(PullPolicyEx.never())
