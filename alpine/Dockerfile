@@ -1,4 +1,4 @@
-FROM 
+FROM alpine:3.14.0
 
 LABEL maintainer="Lukas Holota <me@lholota.com>"
 
