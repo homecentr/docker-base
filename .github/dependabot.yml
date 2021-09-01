@@ -1,4 +1,9 @@
 version: 2
+registries:
+  maven-github:
+    type: maven-repository
+    url: https://maven.pkg.github.com/homecentr
+    token: ${{ secrets.GH_PACKAGES_TOKEN }}
 updates:
 - package-ecosystem: github-actions
   directory: "/"
@@ -22,7 +27,7 @@ updates:
     include: scope
 - package-ecosystem: gradle
   directory: "/tests"
-  token: ${{ secrets.GH_PACKAGES_TOKEN }}
+  registries: "*"
   schedule:
     interval: daily
   open-pull-requests-limit: 10
