@@ -1,0 +1,17 @@
+#!/usr/bin/with-contenv ash
+
+homecentr_create_group() {
+  # $1 = Group name
+  # $2 = Group ID
+
+  # Check if the group exists already
+  cat /etc/group | grep "^$1:" > /dev/null
+
+  if [ $? == 0 ]
+  then
+    # Group already exists, delete it
+    delgroup "$1"
+  fi
+  
+  addgroup -g "$2" "$1"
+}

@@ -1,0 +1,8 @@
+#!/usr/bin/with-contenv ash
+
+homecentr_set_s6_env_var() {
+  # $1 = Variable name
+  # $2 = Variable value
+
+  echo "$2" > "/var/run/s6/container_environment/$1"
+}

@@ -4,6 +4,7 @@ services:
     build: .
     image: homecentr/base:alpine-local
     environment:
+      PUID_ADDITIONAL_GROUPS: "9005:test-group"
       FILE__TEST_VAR: "/var-value.txt"
       UNRELATED: "some-var"
     volumes:

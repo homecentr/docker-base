@@ -57,4 +57,9 @@ public class BaseRunningWithSecondaryGroupsAsRootShould {
         waitFor(Duration.ofSeconds(10), () -> _container.getLogsAnalyzer().matches(".*ID=.*8005\\(grp1\\).*"));
         waitFor(Duration.ofSeconds(10), () -> _container.getLogsAnalyzer().matches(".*ID=.*8006\\(grp2\\).*"));
     }
+
+    @Test
+    public void printGroupsToOutput() throws Exception {
+        waitFor(Duration.ofSeconds(10), () -> _container.getLogsAnalyzer().matches(".*User additional gids:\\W*.*8005,8006.*"));
+    }
 }

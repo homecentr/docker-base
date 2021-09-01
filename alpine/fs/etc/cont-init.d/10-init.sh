@@ -1,5 +1,8 @@
 #!/usr/bin/with-contenv ash
-import-homecentr-functions
+source homecentr_create_group
+source homecentr_print_banner
+source homecentr_print_context
+source homecentr_set_s6_env_var
 
 EXEC_GROUP="root"
 EXEC_USER="root"
@@ -17,16 +20,6 @@ then
   exit 2
 fi
 
-### Verify required packages are available
-if [ "$PGID" != "0" ] || [ "$PUID" != "0" ]
-then
-  if ( ! type "addgroup" > /dev/null; ) || ( ! type "adduser" > /dev/null; )
-  then
-    >&2 echo "Cannot create user/group, please install shadow package!"
-    exit 1
-  fi
-fi
-
 ### Create primary group
 if [ "$PGID" -ne "0" ]
 then
@@ -39,16 +32,8 @@ then
     deluser nonroot
   fi
 
-  # Check if the group exists already
-  cat /etc/group | grep ^nonroot: > /dev/null
+  homecentr_create_group "nonroot" "$PGID"
 
-  if [ $? == 0 ]
-  then
-    # Group already exists, delete it
-    delgroup nonroot
-  fi
-  
-  addgroup -g $PGID nonroot
   EXEC_GROUP="nonroot"
 fi
 
@@ -63,6 +48,13 @@ fi
 ### Create groups
 if [[ ! -z $PUID_ADDITIONAL_GROUPS ]]
 then
+  echo "$PUID_ADDITIONAL_GROUPS" | egrep '^[0-9]+\:[a-zA-Z0-9_-]+(,[0-9]+\:[a-zA-Z0-9_-]+)*$' > /dev/null
+
+  if [ "$?" != "0" ]; then
+    >&2 echo "The value $PUID_ADDITIONAL_GROUPS is invalid. Valid format is <gid1>:<group-name1>,<gid2>:<group-name2>"
+    exit 2
+  fi
+
   # Expecting string in format "gid:name,gid:name"
   GROUPS=$(echo $PUID_ADDITIONAL_GROUPS | tr "," "\n")
 
@@ -71,22 +63,17 @@ then
     GRP_ID=$(echo $GROUP | cut -d ':' -f 1)
     GRP_NAME=$(echo $GROUP | cut -d ':' -f 2)
 
-    # Create group
-    addgroup -g "$GRP_ID" "$GRP_NAME"
+    # Create group (delete if already exists)
+    homecentr_create_group "$GRP_NAME" "$GRP_ID"
 
     # Add user to the group
     addgroup "$EXEC_USER" "$GRP_NAME"
   done
 fi
 
-print_banner
-echo "
--------------------------------------
-User uid:    $(id -u $EXEC_USER)
-User gid:    $(id -g $EXEC_GROUP)
--------------------------------------
-"
-# TODO: Write additional groups the user is a member of if any are set
+homecentr_print_banner
 
-# Write the variable so that the runas script can use it
-echo "$EXEC_USER" > /var/run/s6/container_environment/EXEC_USER
+# Write the variable so that other scripts can use it
+homecentr_set_s6_env_var "EXEC_USER" "$EXEC_USER"
+
+homecentr_print_context

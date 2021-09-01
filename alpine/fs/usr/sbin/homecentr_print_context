@@ -1,0 +1,15 @@
+#!/usr/bin/with-contenv ash
+
+homecentr_print_context() {
+
+# The gids script filters out the primary group so it matches the structure of the env vars passed to the container
+
+echo "
+-------------------------------------
+User uid:               $(id -u $EXEC_USER)
+User gid:               $(id -g $EXEC_USER)
+User additional gids:   $(id -G $EXEC_USER | tr ' ' '\n' | grep -v "^$(id -g $EXEC_USER)$" | tr '\n' ',' | sed 's/,*$//g')
+-------------------------------------
+"
+
+}
