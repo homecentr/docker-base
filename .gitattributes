@@ -1,5 +1,6 @@
 * text=auto
 *.sh            eol=lf
+**/sbin/**      eol=lf
 **/run          eol=lf
 */services.d/*  eol=lf
 **/run          eol=lf
