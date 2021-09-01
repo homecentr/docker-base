@@ -1,0 +1,14 @@
+#!/usr/bin/with-contenv ash
+
+source /usr/sbin/functions/*
+
+# set_s6_var() {
+#   # $1 = Variable name
+#   # $2 = Variable value
+#   echo $2 > "/var/run/s6/container_environment/$1"
+# }
+
+# exit_if_var_not_defined_or_empty() {
+#   # $1 Var name
+#   # $2 Exit code (should be defaulted to 1 ?)
+# }

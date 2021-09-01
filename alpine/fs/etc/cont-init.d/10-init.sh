@@ -1,4 +1,6 @@
 #!/usr/bin/with-contenv ash
+import-homecentr-functions
+
 EXEC_GROUP="root"
 EXEC_USER="root"
 
@@ -77,19 +79,14 @@ then
   done
 fi
 
-echo '
-    __  __                                     __
-   / / / /___  ____ ___  ___  ________  ____  / /______
-  / /_/ / __ \/ __ `__ \/ _ \/ ___/ _ \/ __ \/ __/ ___/
- / __  / /_/ / / / / / /  __/ /__/  __/ / / / /_/ /    
-/_/ /_/\____/_/ /_/ /_/\___/\___/\___/_/ /_/\__/_/     
-'
+print_banner
 echo "
 -------------------------------------
 User uid:    $(id -u $EXEC_USER)
 User gid:    $(id -g $EXEC_GROUP)
 -------------------------------------
 "
+# TODO: Write additional groups the user is a member of if any are set
 
 # Write the variable so that the runas script can use it
 echo "$EXEC_USER" > /var/run/s6/container_environment/EXEC_USER
