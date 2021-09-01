@@ -3,7 +3,8 @@ registries:
   maven-github:
     type: maven-repository
     url: https://maven.pkg.github.com/homecentr
-    token: ${{ secrets.GH_PACKAGES_TOKEN }}
+    username: lholota
+    password: ${{ secrets.GH_PACKAGES_TOKEN }}
 updates:
 - package-ecosystem: github-actions
   directory: "/"
