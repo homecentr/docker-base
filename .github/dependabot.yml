@@ -1,15 +1,5 @@
 version: 2
 updates:
-- package-ecosystem: docker
-  directory: "/centos"
-  schedule:
-    interval: daily
-  open-pull-requests-limit: 10
-  labels:
-  - dependencies
-  commit-message:
-    prefix: fix
-    include: scope
 - package-ecosystem: github-actions
   directory: "/"
   schedule:
@@ -29,4 +19,15 @@ updates:
   - dependencies
   commit-message:
     prefix: fix
+    include: scope
+- package-ecosystem: gradle
+  directory: "/tests"
+  token: ${{ secrets.GH_PACKAGES_TOKEN }}
+  schedule:
+    interval: daily
+  open-pull-requests-limit: 10
+  labels:
+  - dependencies
+  commit-message:
+    prefix: chore
     include: scope
