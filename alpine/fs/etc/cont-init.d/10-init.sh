@@ -32,7 +32,7 @@ then
     deluser nonroot
   fi
 
-  homecentr_create_group "nonroot" "$PGID"
+  homecentr_create_group "$PGID" "nonroot"
 
   EXEC_GROUP="nonroot"
 fi
@@ -64,7 +64,7 @@ then
     GRP_NAME=$(echo $GROUP | cut -d ':' -f 2)
 
     # Create group (delete if already exists)
-    homecentr_create_group "$GRP_NAME" "$GRP_ID"
+    homecentr_create_group "$GRP_ID" "$GRP_NAME"
 
     # Add user to the group
     addgroup "$EXEC_USER" "$GRP_NAME"
