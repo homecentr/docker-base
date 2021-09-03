@@ -1,0 +1,11 @@
+#!/usr/bin/with-contenv ash
+
+homecentr_get_s6_env_var() {
+  # $1 = Variable name
+  
+  S6_VAR_FILE_NAME="/var/run/s6/container_environment/$1"
+
+  if [ -f $S6_VAR_FILE_NAME ]; then
+    echo "$(cat $S6_VAR_FILE_NAME)"
+  fi
+}
