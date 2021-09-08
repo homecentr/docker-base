@@ -1,7 +1,5 @@
 #!/usr/bin/with-contenv ash
 source homecentr_create_group
-source homecentr_print_banner
-source homecentr_print_context
 source homecentr_set_s6_env_var
 
 EXEC_GROUP="root"
@@ -71,9 +69,5 @@ then
   done
 fi
 
-homecentr_print_banner
-
 # Write the variable so that other scripts can use it
 homecentr_set_s6_env_var "EXEC_USER" "$EXEC_USER"
-
-homecentr_print_context
