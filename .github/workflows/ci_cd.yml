@@ -50,7 +50,7 @@ jobs:
         base: [ "alpine" ]
     steps:
       - name: Download version artifact
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: version
 
