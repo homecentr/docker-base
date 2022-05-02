@@ -26,7 +26,7 @@ jobs:
           echo $RELEASE_VERSION > version.txt
 
       - name: "Upload version number as artifact"
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: version
           path: version.txt
